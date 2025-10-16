@@ -1,0 +1,6 @@
+"0","studentID<-c(1,2,3,4,5)"
+"0","math_score<-c(12,17,10,9,NA)"
+"0","gender<-c(""M"",""F"",""M"",""M"",""F"")"
+"0","it_score<-c(13,18,11,10,19)"
+"0","scoredata<-data.frame(studentID,gender,math_score,it_score) "
+"0","scoredata"

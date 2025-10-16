@@ -1,0 +1,2 @@
+"0","knitr::opts_chunk$set(echo = TRUE, results = 'markup', comment = ""##"","
+"0","  collapse = TRUE,tidy = TRUE   )"
