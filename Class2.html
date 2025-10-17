@@ -1415,12 +1415,12 @@ roster&lt;-cbind(firstname, lastname,roster[,-1])
 roster&lt;-roster[order(lastname,firstname),] 
 roster</code></pre>
 <pre><code>##   firstname lastname Math Science English  score grade
-## 7         M        a  522      77      27  0.085  &lt;NA&gt;
+## 7         M        a  522      77      27  0.085     A
 ## 4         A        l  495      82      20 -0.352  &lt;NA&gt;
-## 5         c        l  512      75      29  0.118  &lt;NA&gt;
-## 2         A        n  412      99      22  0.076  &lt;NA&gt;
-## 1         J        o  600      95      25  0.904  &lt;NA&gt;
-## 6         J        o  410      89      30  0.289  &lt;NA&gt;
+## 5         c        l  512      75      29  0.118     A
+## 2         A        n  412      99      22  0.076     A
+## 1         J        o  600      95      25  0.904     A
+## 6         J        o  410      89      30  0.289     A
 ## 3         B        r  358      80      18 -1.119  &lt;NA&gt;</code></pre>
 <div id="aggregation-and-reshaping" class="section level2">
 <h2>Aggregation and reshaping</h2>
@@ -1444,7 +1444,7 @@ cars</code></pre>
 <div id="aggregate-data" class="section level3">
 <h3>aggregate data</h3>
 <pre class="r"><code>options(digits=3)
-attach(mtcars)</code></pre>
+attach(mtcars) </code></pre>
 <pre><code>## The following object is masked from package:ggplot2:
 ## 
 ##     mpg</code></pre>
