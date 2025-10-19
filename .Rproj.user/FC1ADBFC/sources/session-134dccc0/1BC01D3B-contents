@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, results = TRUE)
+knitr::opts_chunk$set(echo = TRUE, results = 'markup', collapse = TRUE,tidy = TRUE )
 ```
 # Data Visualization and Data management
 ## Test to treat data

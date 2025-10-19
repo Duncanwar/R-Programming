@@ -1,27 +1,28 @@
 {
-    "id": "3961BA8D",
-    "path": "~/Desktop/R-Programming/Class3.rmd",
-    "project_path": "Class3.rmd",
+    "id": "22164309",
+    "path": "~/DuncanOS/PRep.rmd",
+    "project_path": null,
     "type": "r_markdown",
-    "hash": "3870666609",
+    "hash": "1998615923",
     "contents": "",
     "dirty": false,
-    "created": 1760666178950.0,
+    "created": 1760819541824.0,
     "source_on_save": true,
-    "relative_order": 2,
+    "relative_order": 4,
     "properties": {
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "8,80",
-        "scrollLine": "0"
+        "cursorPosition": "131,29",
+        "scrollLine": "128",
+        "last_setup_crc32": "134dccc0c7e2e05c"
     },
     "folds": "",
-    "lastKnownWriteTime": 1760668656,
+    "lastKnownWriteTime": 1760829957,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1760668656838,
+    "last_content_update": 1760829957208,
     "read_only": false,
     "read_only_alternatives": []
 }

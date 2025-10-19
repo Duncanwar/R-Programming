@@ -1,0 +1,173 @@
+---
+title: "Cholera Outbreak Statistical Report"
+author: "Ndanyuzwe Duncan Semugeshi"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(lubridate)
+library(kableExtra)
+file_path <- "~/Downloads/DataFile.xls"
+df <- read_excel(file_path)
+
+# Clean column names
+
+df <- clean_names(df)
+
+# Display structure
+
+glimpse(df)
+```
+3. Data Quality Assessment
+```{r} 
+summary_df <- df %>%
+summarise(across(everything(),
+list(missing = ~sum(is.na(.)),
+missing_pct = ~mean(is.na(.))*100)))
+
+duplicates <- df %>% duplicated() %>% sum()
+
+kable(summary_df, caption = "Missing values summary") %>%
+kable_styling(full_width = FALSE)
+
+cat("Number of duplicate rows:", duplicates)
+```
+4. Data Cleaning and Recoding
+4.1 Harmonize the Sex variable
+```{r} 
+df <- df %>%
+mutate(sex = case_when(
+sex %in% c("M", "Male", "male", "m") ~ "Male",
+sex %in% c("F", "Female", "female", "f") ~ "Female",
+TRUE ~ NA_character_
+))
+
+table(df$sex, useNA = "ifany")
+```
+4.2 Recode Age into AgeGroup
+```{r}
+df <- df %>%
+mutate(age_group = case_when(
+age < 5 ~ "<5 years",
+age >= 5 & age <= 14 ~ "5–14 years",
+age >= 15 & age <= 24 ~ "15–24 years",
+age >= 25 & age <= 49 ~ "25–49 years",
+age >= 50 ~ "50+ years",
+TRUE ~ NA_character_
+))
+
+table(df$age_group, useNA = "ifany")
+```
+5. Descriptive Statistics
+5.1 Total cases and deaths
+```{r}
+total_cases <- nrow(df)
+death_count <- df %>% filter(outcome == "Death") %>% nrow()
+cfr <- (death_count / total_cases) * 100
+
+data.frame(
+Indicator = c("Total Cases", "Total Deaths", "Case Fatality Rate (%)"),
+Value = c(total_cases, death_count, round(cfr, 2))
+) %>%
+kable(caption = "Overall situation summary") %>%
+kable_styling(full_width = FALSE)
+```
+5.2 Geographical Distribution
+```{r}
+cases_by_district <- df %>%
+count(district, sort = TRUE)
+
+kable(cases_by_district, caption = "Number of Cases by District") %>%
+kable_styling(full_width = FALSE)
+```
+5.3 Gender Distribution
+```{r}
+gender_dist <- df %>%
+count(sex) %>%
+mutate(percent = round(n / sum(n) * 100, 2))
+
+kable(gender_dist, caption = "Gender Distribution of Cases") %>%
+kable_styling(full_width = FALSE)
+```
+5.4 Age Group Distribution
+```{r}
+age_dist <- df %>%
+count(age_group) %>%
+mutate(percent = round(n / sum(n) * 100, 2))
+
+kable(age_dist, caption = "Distribution by Age Group") %>%
+kable_styling(full_width = FALSE)
+```
+5.5 Age 
+```{r}
+outcome_dist <- df %>% count(outcome)
+recovery_rate <- df %>% filter(outcome == "Recovered") %>% nrow() / total_cases * 100
+
+kable(outcome_dist, caption = "Distribution by Outcome") %>%
+kable_styling(full_width = FALSE)
+
+cat("Recovery Rate:", round(recovery_rate, 2), "%")
+```
+6. Visualizations
+6.1 Epidemic Curve
+names(df)
+```{r}
+df <- df %>%
+mutate(date_of_onset = as.Date(date_of_onset))
+
+ggplot(df, aes(x = date_of_onset)) +
+geom_histogram(binwidth = 1, fill = "steelblue", color = "black") +
+labs(title = "Epidemic Curve of Cholera Outbreak",
+x = "Date of Onset", y = "Number of Cases") +
+theme_minimal()
+```
+6.2 Gender Distribution
+```{r}
+ggplot(gender_dist, aes(x = sex, y = n, fill = sex)) +
+geom_bar(stat = "identity") +
+labs(title = "Gender Distribution", x = "Gender", y = "Number of Cases") +
+theme_minimal()
+```
+6.3 Age Group Distribution
+```{r}
+ggplot(age_dist, aes(x = age_group, y = n, fill = age_group)) +
+geom_bar(stat = "identity") +
+labs(title = "Cases by Age Group", x = "Age Group", y = "Cases") +
+theme_minimal()
+```
+6.4 Outcome Distribution
+```{r}
+ggplot(outcome_dist, aes(x = outcome, y = n, fill = outcome)) +
+geom_bar(stat = "identity") +
+labs(title = "Distribution of Outcomes", x = "Outcome", y = "Cases") +
+theme_minimal()
+```
+7. Statistical Analysis
+
+We assess whether the distribution of cases differs significantly across groups.
+
+```{r}
+# Chi-square tests
+
+age_outcome <- chisq.test(table(df$age_group, df$outcome))
+sex_outcome <- chisq.test(table(df$sex, df$outcome))
+district_outcome <- chisq.test(table(df$district, df$outcome))
+
+age_outcome
+sex_outcome
+district_outcome
+```
